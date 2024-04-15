@@ -7,6 +7,7 @@ import { StackRoutes } from '@/models/routes/StackRoutes';
 import { INavRoutes, IStackRouteName, StackNavigator } from '@/libs/types/type';
 import { useState } from 'react';
 import { ThemeContext } from '@/models/context/ThemeContext';
+import {StatusBar} from 'expo-status-bar';
 
 const Stack = createNativeStackNavigator<StackNavigator>();
 
@@ -23,6 +24,7 @@ export default function App():JSX.Element {
                 <Stack.Screen key={i.name} {...i} />
               ))}
             </Stack.Navigator>
+            <StatusBar style="dark" />
           </NavigationContainer>
         </ThemeContext.Provider>
       </PersistGate>

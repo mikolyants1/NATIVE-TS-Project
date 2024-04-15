@@ -9,7 +9,7 @@ export const TabRoutes:INavRoutes<ITabRouteName>[] = [
       component:Main,
       options:{
         headerShown:false,
-        tabBarIcon:({color,size}:ITabIconProps)=>(
+        tabBarIcon:({color,size}:ITabIconProps):JSX.Element=>(
           <Ionicons name="home" color={color} size={size} />
         )
       }
@@ -19,7 +19,7 @@ export const TabRoutes:INavRoutes<ITabRouteName>[] = [
       component:Search,
       options:{
         headerShown:false,
-        tabBarIcon:({color,size}:ITabIconProps)=>(
+        tabBarIcon:({color,size}:ITabIconProps):JSX.Element=>(
           <Ionicons name="search" color={color} size={size} />
         )
       }

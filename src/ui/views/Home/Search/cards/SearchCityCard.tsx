@@ -1,17 +1,41 @@
-import {View,Text,Button, StyleSheet} from 'react-native';
+import {View,Text,Button, StyleSheet, ActivityIndicator, Easing} from 'react-native';
 import { memo } from 'react';
 import { ISearchItem, NavFunction } from '@/libs/types/type';
 import { useNavigation } from '@react-navigation/native';
 import { LinearGradient } from 'expo-linear-gradient';
+import Animated,{FadeInDown} from 'react-native-reanimated';
+import Error from '@/ui/load/Error';
+import { Entry } from '@/libs/style/style';
 
-function SearchCityCard({name,sys,coord}:ISearchItem):JSX.Element{
+interface IProps {
+  data:ISearchItem|undefined,
+  isLoading:boolean,
+  isError:boolean
+}
+
+function SearchCityCard({data,isError,isLoading}:IProps):JSX.Element{
   const navigation = useNavigation<NavFunction>();
 
-  const navigate = ():void => {
+  const navigate = (name:string) => ():void => {
     navigation.navigate('Personal',{name})
   }
+
+  if (isLoading){
     return (
-      <View style={styles.wrap}>
+      <ActivityIndicator
+       style={{marginTop:40}}
+       color="green"
+       size="large"
+       />
+    );
+  }
+  if (isError) return <Error />;
+  if (!data) return <View />;
+
+    return (
+      <Animated.View
+       style={styles.wrap}
+       entering={Entry}>
           <LinearGradient
            colors={["gold","gold","#F0F0F0","#404040","#404040"]}
            start={{x:0,y:0}}
@@ -19,12 +43,12 @@ function SearchCityCard({name,sys,coord}:ISearchItem):JSX.Element{
            style={styles.container}>
           <View>
             <Text style={styles.title}>
-              {name}
+              {data.name}
             </Text>
             <Text style={styles.main}>
               country {" "}
               <Text style={styles.section}>
-                {sys.country}
+                {data.sys.country}
               </Text>
             </Text>
           </View>
@@ -38,22 +62,22 @@ function SearchCityCard({name,sys,coord}:ISearchItem):JSX.Element{
               <Text style={styles.main}>
                  Lat:
                 <Text style={styles.section}>
-                   {coord.lat}
+                   {data.coord.lat}
                 </Text>
                  {"  "}
                  Lon:
                 <Text style={styles.section}>
-                   {coord.lon}
+                   {data.coord.lon}
                 </Text>
               </Text>
             </View>
           </View>
           <Button 
            title='more' 
-           onPress={navigate}
+           onPress={navigate(data.name)}
            />  
         </LinearGradient>
-        </View>
+        </Animated.View>
     )  
 }
 
@@ -68,6 +92,8 @@ const styles = StyleSheet.create({
       marginTop:20,
       width:'90%',
       height:170,
+      display:"flex",
+      justifyContent:"center",
       borderColor:"grey",
       borderRadius:10,
       overflow:"hidden"        

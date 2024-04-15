@@ -2,13 +2,14 @@ import { View,Text,ImageBackground, Pressable, StyleSheet, ListRenderItemInfo } 
 import { useGetDayWeatherQuery, useGetWeekWeatherQuery } from '../../models/store/api/endpoints/endpoints';
 import Error from '../load/Error';
 import Loading from '../load/Loading';
-import { ISource, IWeekList } from '../../libs/types/type';
+import { IDay, ISource, IWeekList } from '@/libs/types/type';
 import { createSource } from '../../models/functions/create/createSource';
 import { useNavigation } from '@react-navigation/native';
 import { MainContainer, WeekList } from '../../libs/style/style';
 import DataCard from './content/DataCard';
 import WeekCard from './content/WeekCard';
 import { random } from '../../models/functions/create/createRandom';
+import { DataShowType } from '@/libs/enum/enum';
 
 interface IProps {
     city:string,
@@ -29,7 +30,7 @@ function City({city,children}:IProps):JSX.Element{
 
   if (day.isLoading || week.isLoading) return <Loading />;
   if (day.isError || week.isError) return <Error />;
-
+   console.log(day.data)
    return (
       <MainContainer>
         <ImageBackground style={styles.image} source={source}>
@@ -43,33 +44,29 @@ function City({city,children}:IProps):JSX.Element{
                {day.data.weather[0].main}
             </Text>
           </View>
-          <View>
-            <Text style={styles.main}>
-              Country:
-              <Text style={styles.section}>
-                 {day.data.sys.country} 
-              </Text>
-            </Text>
-          </View>
-          <View>
-            <Text style={styles.main}>
-               Wind speed:
-               <Text style={styles.section}>
-                  {day.data.wind.speed}
-               </Text>
-             </Text>
-           </View>
+          <DataCard
+           type={DataShowType.BASIC}
+           firstTitle='Country'
+           firstData={day.data.sys.country}
+          />
+          <DataCard
+           type={DataShowType.BASIC}
+           firstData={day.data.wind.speed}
+           firstTitle='Wind speed:'
+          />
            <DataCard
-            title="Temp"
-            subTitle="Feels"
-            temp={day.data.main.temp}
-            feels_like={day.data.main.feels_like}
+            type={DataShowType.BASIC}
+            firstTitle="Temp"
+            secondTitle="Feels"
+            firstData={day.data.main.temp}
+            secondData={day.data.main.feels_like}
              />
            <DataCard
-            title="Min Temp"
-            subTitle="Max Temp"
-            temp={day.data.main.temp_min}
-            feels_like={day.data.main.temp_max}
+            type={DataShowType.FULL}
+            firstTitle="Min Temp"
+            secondTitle="Max Temp"
+            firstData={day.data.main.temp_min}
+            secondData={day.data.main.temp_max}
              />
            <View>
              <Text style={styles.main}>
@@ -77,36 +74,28 @@ function City({city,children}:IProps):JSX.Element{
              </Text>
            </View>
            <DataCard
-            title="Lat"
-            subTitle="Lon"
-            temp={day.data.coord.lat}
-            feels_like={day.data.coord.lon}
+            type={DataShowType.FULL}
+            firstTitle="Lat"
+            secondTitle="Lon"
+            firstData={day.data.coord.lat}
+            secondData={day.data.coord.lon}
              /> 
            <View style={styles.buttons}>
             {children[0]}
-             <View>
-               <Text style={styles.main}>
-                 Sunrise:
-                 <Text style={styles.section}>
-                    {day.data.sys.sunrise}
-                 </Text>
-                  {"  "}
-                  Sunset:
-                 <Text style={styles.section}>
-                    {day.data.sys.sunset}
-                 </Text>
-               </Text>
-             </View>
+             <DataCard
+              type={DataShowType.FULL}
+              firstTitle='Sunrise'
+              secondTitle='Sunset'
+              firstData={day.data.sys.sunrise}
+              secondData={day.data.sys.sunset}
+             />
             {children[1]}
            </View>
-           <View>
-             <Text style={styles.main}>
-                Humidity:
-               <Text style={styles.section}>
-                  {day.data.main.humidity}
-               </Text>
-             </Text>
-           </View>
+           <DataCard
+            type={DataShowType.BASIC}
+            firstTitle='Humandity:'
+            firstData={day.data.main.huidity}
+           />
            <WeekList
             data={week.data.list}
             keyExtractor={(_:IWeekList)=>random(week.data.list.length)}

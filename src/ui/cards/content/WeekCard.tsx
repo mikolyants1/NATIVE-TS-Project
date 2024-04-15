@@ -1,17 +1,20 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { memo } from 'react';
 import { IWeekList } from '../../../libs/types/type';
+import Animated,{FadeInLeft} from 'react-native-reanimated';
 
 interface IProps {
     idx:number,
     item:IWeekList
 }
  function Week({item,idx}:IProps):JSX.Element{
+   const num:number = idx + 1;
     return (
-        <View style={styles.week}>
+        <Animated.View style={styles.week}
+         entering={FadeInLeft.delay(num * 100)}>
           <View>
             <Text style={styles.date}>
-               Date {idx + 1}
+               Date {num}
             </Text>
           </View>
           <View>
@@ -28,7 +31,7 @@ interface IProps {
               </Text>
             </Text>
           </View>
-        </View>
+        </Animated.View>
     );
 };
 

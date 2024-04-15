@@ -3,6 +3,7 @@ import { memo, useMemo } from "react"
 import Temptation from "./temptetion/Temptation";
 import { IDateArr, IDayObj } from "@/libs/types/type";
 import { createDateArr } from "@/models/functions/create/createDay";
+import Animated,{FadeInLeft} from 'react-native-reanimated';
 
 interface IProps {
   idx:number,
@@ -14,9 +15,10 @@ interface IProps {
 
  function DateCard({weather,feels_like,temp,speed,idx}:IProps):JSX.Element{
   const arrItem:IDateArr[] = useMemo(() =>createDateArr({temp,feels_like}),[]);
-  console.log(arrItem)
+  
       return (
-          <View style={styles.container}>
+          <Animated.View style={styles.container}
+           entering={FadeInLeft.delay((idx + 1) * 400)}>
             <View style={styles.main}>
               <Text style={styles.subTitle}>
                   Date {idx + 1}
@@ -40,7 +42,7 @@ interface IProps {
                <Temptation key={i.name} {...i} />
              ))}
           </View>
-        </View>
+        </Animated.View>
       );
   };
 

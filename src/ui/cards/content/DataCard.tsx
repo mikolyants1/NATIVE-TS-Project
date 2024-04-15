@@ -1,26 +1,32 @@
 import { StyleSheet, Text, View } from 'react-native'
 import { memo } from 'react';
+import { DataShowType } from '@/libs/enum/enum';
 
 interface IProps {
-    title:string,
-    subTitle:string,
-    temp:string,
-    feels_like:string
+    type:DataShowType,
+    firstTitle:string,
+    secondTitle?:string,
+    firstData:string,
+    secondData?:string
 }
 
- function DataCard({title,subTitle,temp,feels_like}:IProps):JSX.Element{
+ function DataCard({type,firstData,firstTitle,secondData,secondTitle}:IProps):JSX.Element{
     return (
         <View>
           <Text style={styles.main}>
-            {title}:
+            {firstTitle}:
             <Text style={styles.section}>
-              {temp}
+              {firstData}
             </Text>
-             {"  "}
-              {subTitle}:
-            <Text style={styles.section}>
-              {feels_like}
-            </Text>
+            {type == DataShowType.FULL && (
+              <>
+                {"  "}
+                {secondTitle}:
+                <Text style={styles.section}>
+                  {secondData}
+                </Text>
+              </>
+            )}
           </Text>
         </View>
     );

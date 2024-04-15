@@ -1,20 +1,17 @@
 import { useState } from 'react'
 import { ActivityIndicator, SafeAreaView, ScrollView, StyleSheet, Text, TextInput, TouchableOpacity, View } from 'react-native'
-import SearchCityCatd from './cards/SearchCityCard';
+import SearchCityCard from './cards/SearchCityCard';
 import { useGetSearchCityMutation } from '@/models/store/api/endpoints/endpoints';
 import {LinearGradient} from 'expo-linear-gradient';
 import Error from '../../../load/Error';
 
 function Search():JSX.Element {
   const [text,setText] = useState<string>("");
-  const [setParam,{data,isLoading,isError}] = useGetSearchCityMutation();
+  const [setParam,result] = useGetSearchCityMutation();
   
   const search = ():void => {
     if (text) setParam(text);
   }
-
-  if (isLoading) return <ActivityIndicator size="large" />;
-  if (isError) return <Error />;
 
   return (
     <SafeAreaView style={styles.container}>
@@ -38,9 +35,11 @@ function Search():JSX.Element {
           </TouchableOpacity>
         </View>
         <View>
-       {data&&(
-         <SearchCityCatd {...data} />
-       )}
+         <SearchCityCard
+          data={result.data}
+          isLoading={result.isLoading}
+          isError={result.isError}
+         />
       </View>
     </ScrollView>
   </SafeAreaView>

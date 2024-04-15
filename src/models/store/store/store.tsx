@@ -1,13 +1,14 @@
 import { bindActionCreators, combineReducers, configureStore } from "@reduxjs/toolkit";
 import { AppDispatch, AppSelector, IConfig, IStore } from "@/libs/types/type";
-import storage from 'redux-persist/lib/storage';
+import storage from 'redux-persist-expo-filesystem';
 import CitySlice, { CityActions } from "../slices/slice";
 import { CityApi } from "../api/api";
 import { persistReducer, persistStore } from "redux-persist";
 import { useSelector,useDispatch } from "react-redux";
 
-const config:IConfig = {
+const config = {
   key:"city_root",
+  version:17,
   storage
 }
 
@@ -20,8 +21,8 @@ const persist = persistReducer(config,combine);
 
 export const store = configureStore({
   reducer:persist,
-  middleware:(getDefaultMiddleware)=> {
-    return getDefaultMiddleware().concat(CityApi.middleware) 
+  middleware:(getDefaultMiddleware)=>{
+    return getDefaultMiddleware().concat(CityApi.middleware);
   },
 });
 

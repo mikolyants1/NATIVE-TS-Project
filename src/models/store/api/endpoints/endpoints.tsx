@@ -1,5 +1,5 @@
 import { key } from "@/libs/sources/source";
-import { ISearchItem } from "@/libs/types/type";
+import { IDay, ISearchItem } from "@/libs/types/type";
 import { CityApi } from "../api";
 
 export const CityEnpoints = CityApi.injectEndpoints({
